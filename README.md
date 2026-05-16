@@ -1,18 +1,47 @@
-# Planning AI Backend - Render
+# Planning AI Backend with OpenAI Vector Store
 
-Backend بسيط لتجربة ربط صفحة البحث في الأدلة التخطيطية مع API منشور على Render.
+هذا Backend يربط صفحة Netlify مع OpenAI Vector Store.
 
-## الملفات المطلوبة في جذر مستودع GitHub
+## الملفات
 
-يجب أن تكون الملفات بهذا الشكل، وليس داخل مجلد فرعي:
+- `main.py`: API endpoint `/ask`.
+- `upload_to_vector_store.py`: سكربت محلي لرفع ملفات الأدلة إلى OpenAI Vector Store.
+- `requirements.txt`: مكتبات Python.
+- `render.yaml`: إعدادات Render.
+- `.python-version`: لتثبيت Python 3.11.9 على Render.
+
+## متغيرات البيئة المطلوبة في Render
 
 ```text
-main.py
-requirements.txt
-render.yaml
-runtime.txt
-README.md
+OPENAI_API_KEY=ضع مفتاح OpenAI API هنا
+OPENAI_VECTOR_STORE_ID=ضع رقم Vector Store هنا
+OPENAI_MODEL=gpt-4.1-mini
 ```
+
+## رفع الأدلة إلى Vector Store
+
+على جهازك:
+
+```bash
+pip install -r requirements.txt
+set OPENAI_API_KEY=sk-...
+python upload_to_vector_store.py --folder "C:\path\to\Planning_Knowledge_Base" --name "Planning Knowledge Base"
+```
+
+على Mac/Linux:
+
+```bash
+export OPENAI_API_KEY=sk-...
+python upload_to_vector_store.py --folder "/path/to/Planning_Knowledge_Base" --name "Planning Knowledge Base"
+```
+
+بعد الانتهاء سيظهر:
+
+```text
+OPENAI_VECTOR_STORE_ID=vs_...
+```
+
+انسخه وضعه في Render.
 
 ## إعدادات Render
 
@@ -26,18 +55,4 @@ Start Command:
 
 ```bash
 uvicorn main:app --host 0.0.0.0 --port $PORT
-```
-
-## اختبار الخدمة
-
-بعد النشر افتح:
-
-```text
-https://YOUR-RENDER-URL.onrender.com
-```
-
-ثم:
-
-```text
-https://YOUR-RENDER-URL.onrender.com/docs
 ```
